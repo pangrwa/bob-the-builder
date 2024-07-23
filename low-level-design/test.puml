@@ -1,0 +1,44 @@
+
+@startuml
+
+class RentalSystem <<Singleton>> {
+    - Car[] cars
+    - Reservation[] reservations
+    + addCar(Car) : void
+    + removeCar(String) : void
+    + createReservation(Car, Customer) : void
+    + cancelReservation(String) : void
+    + searchCarByMake(String) : Car[]
+    + searchCarByModel(String) : Car[]
+    + searchCarByYear(String) : Car[]
+    + searchCarByLicensePlateNumber(String) : Car
+    + searchAvailableCars(Date, Date) : Car[]
+}
+
+class Reservation {
+    - String id
+    - Car car
+    - Customer customer
+    - Date startDate
+    - Date endDate
+}
+
+class Car {
+    - String id
+    - String make
+    - String model
+    - String year
+    - String licensePlateNumber
+    - double rentalPricePerDay
+    - boolean isAvailable
+}
+
+class Customer {
+    - String id
+    - String name
+    - String address
+    - String phoneNumber
+    - String email
+    - String driverLicenseNumber
+}
+@enduml
