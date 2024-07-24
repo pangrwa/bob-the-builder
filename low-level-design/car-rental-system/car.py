@@ -1,4 +1,7 @@
+from typing import Dict
 from itertools import count
+from reservation import Reservation
+import datetime
 
 
 class Car(object):
@@ -13,6 +16,7 @@ class Car(object):
         self._year: str = year
         self._license_plate: str = license_plate
         self._daily_rate: str = daily_rate
+        self._reservations: Dict[int, Reservation] = {}
 
     @property
     def id(self) -> int:
@@ -37,3 +41,17 @@ class Car(object):
     @property
     def daily_rate(self) -> float:
         return self._daily_rate
+
+    def is_available(self, start_date: datetime.date, end_date: datetime.date) -> bool:
+        for r in self._reservations.values():
+            if start_date < r.end_date and r.start_date < end_date:
+                return False
+            else:
+                return True
+        return True
+
+    def add_reservation(self, reservation: Reservation) -> None:
+        self._reservations[reservation.id] = reservation
+
+    def remove_reservation(self, reservation_id: str) -> None:
+        self._reservations.pop(reservation_id, None)

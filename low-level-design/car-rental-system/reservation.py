@@ -1,5 +1,5 @@
+from __future__ import annotations
 import datetime
-from car import Car
 from customer import Customer
 from itertools import count
 
@@ -10,13 +10,13 @@ class Reservation(object):
 
     def __init__(
         self,
-        car: Car,
+        car_id: str,
         customer: Customer,
         start_date: datetime.date,
         end_date: datetime.date,
     ):
         self._id: int = next(Reservation._counter)
-        self._car: str = car
+        self._car_id: str = car_id
         self._customer: str = customer
         self._start_date: str = start_date
         self._end_date: str = end_date
@@ -26,8 +26,8 @@ class Reservation(object):
         return self._id
 
     @property
-    def car(self) -> Car:
-        return self._car
+    def car_id(self) -> str:
+        return self._car_id
 
     @property
     def customer(self) -> Customer:

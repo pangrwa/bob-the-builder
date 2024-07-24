@@ -17,7 +17,7 @@ class RentalSystem <<Singleton>> {
 
 class Reservation {
     - String id
-    - Car car
+    - String carId
     - Customer customer
     - Date startDate
     - Date endDate
@@ -30,7 +30,10 @@ class Car {
     - String year
     - String licensePlateNumber
     - double rentalPricePerDay
-    - boolean isAvailable
+    - Reservation[] reservations
+
+    + isCarAvailable() : boolean
+    + addReservation(Reservation) : void
 }
 
 class Customer {
@@ -41,4 +44,11 @@ class Customer {
     - String email
     - String driverLicenseNumber
 }
+
+RentalSystem "1" *--> "*" Car
+RentalSystem "1" *--> "*" Reservation
+RentalSystem ..> Customer
+Reservation *--> Customer
+
+Car "1" *--> "*" Reservation
 @enduml

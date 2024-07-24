@@ -15,28 +15,20 @@ class RentalSystem(object):
         return cls._instance
 
     def __init__(self) -> None:
-        self._cars: Dict[int, Car] = []
-        self._reservations: Dict[int, Reservation] = []
+        self._cars: Dict[int, Car] = {}
+        self._reservations: Dict[int, Reservation] = {}
+
+    @staticmethod
+    def get_instance() -> Self:
+        if RentalSystem._instance is None:
+            RentalSystem()
+        return RentalSystem._instance
 
     def add_car(self, car: Car) -> None:
         self._cars[car.id] = car
 
     def remove_car(self, car: Car) -> None:
         self._cars.pop(car.id)
-
-    def _is_car_available(
-        self, car: Car, start_date: datetime.date, end_date: datetime.date
-    ) -> bool:
-        if not car.is_available:
-            return False  # car is not available
-        # look through all the current reservations
-        for r in self._reservations.values():
-            if r.car_id == car.id:
-                if start_date < r.end_date and r.start_date < end_date:
-                    return False
-                else:
-                    return True
-        return True
 
     def create_reservation(
         self,
@@ -45,20 +37,28 @@ class RentalSystem(object):
         start_date: datetime.date,
         end_date: datetime.date,
     ) -> Reservation:
-        if self._is_car_available(car, start_date, end_date):
-            reservation: Reservation = Reservation(car, customer, start_date, end_date)
-            self._reservation[reservation.id] = reservation
+        if car.id in self._cars and car.is_available(start_date, end_date):
+            reservation: Reservation = Reservation(
+                car.id, customer, start_date, end_date
+            )
+            self._reservations[reservation.id] = reservation
+            car.add_reservation(reservation)
             return reservation
         return None
+
+    def cancel_reservation(self, reservation_id: str) -> None:
+        reservation: Reservation = self._reservations.pop(reservation_id, None)
+        self._cars[reservation.car_id].remove_reservation(reservation_id)
+        # if reservation is not found, ideally throw an exception
 
     def search_car_by_availability(
         self, start_date: datetime.date, end_date: datetime.date
     ) -> List[Car]:
         cars: List[Car] = []
         for car in self._cars.values():
-            if self._is_car_available(car, start_date, end_date):
+            if car.is_available(start_date, end_date):
                 cars.append(car)
-        return car
+        return cars
 
     def search_car_by_make(self, make: str) -> List[Car]:
         cars: List[Car] = []
