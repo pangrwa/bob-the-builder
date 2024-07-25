@@ -1,0 +1,18 @@
+[build-system]
+requires=["setuptools"]
+build-backend="setuptools.build_meta"
+
+[project]
+name="pywc"
+version="0.0.1"
+authors=[
+  {name = "Pang Rui Wei"}
+]
+description="A simple python implementation of the Linux command WC"
+readme={file="README.md", content-type="text/markdown"}
+keywords=["wc", "word counter"]
+
+[project.scripts]
+# write the executable name
+ pywc="main:main"
+
