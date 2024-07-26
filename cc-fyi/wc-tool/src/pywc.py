@@ -1,6 +1,7 @@
 from typing import Self, Any, List 
-from file import File
+from stream_tracker import StreamTracker
 import sys
+import io
 
 class PYWC:
     # Singleton
@@ -15,42 +16,41 @@ class PYWC:
     def handle_command(self, flags: List[str], files: List[str]) -> str:
         if len(flags) == 0:
            flags = ['-c', '-l', '-w']
+
         res: str = ""
         if len(files) == 0:
-            self._handle_input(flags)
-            return 
-        for file in files:
-            try:  
-                f: File = File(file)
-                res += self._handle_file(flags, f) + '\n'
-            except FileNotFoundError as e:
-                res += str(e) + '\n'
+            st: StreamTracker = StreamTracker(sys.stdin.buffer)
+            res += self._handle_stream(flags, st) + '\n'
+        else:
+            for file in files:
+                try:
+                    with open(file, mode='rb') as f:
+                        st: StreamTracker = StreamTracker(f)
+                        res += self._handle_stream(flags, st)
+                    res += file + '\n'# adds the file name to the result
+                except FileNotFoundError as e:
+                    res += str(e) + '\n'
 
         # remove the last \n
         res = res[:-1]
         return res
 
-    # todo
-    def _handle_input(self, flags: List[str]):
-        pass
-
-    def _handle_file(self, flags: List[str], file: File) -> str:
+    def _handle_stream(self, flags: List[str], stream: StreamTracker) -> str:
         res: str = ""
         for flag in flags:
-            res += self._handle_flag(flag, file) + " "
-        res += file.file_name
+            res += self._handle_flag(flag, stream) + " "
         return res
 
-    def _handle_flag(self, flag: str, file: File) -> str:
+    def _handle_flag(self, flag: str, stream: StreamTracker) -> str:
         match flag: 
             case '-c':
-                return str(file.num_bytes)
+                return str(stream.num_bytes)
             case '-l':
-                return str(file.num_lines)
+                return str(stream.num_lines)
             case '-w':
-                return str(file.num_words)
+                return str(stream.num_words)
             case '-m':
-                return str(file.num_chars)
+                return str(stream.num_chars)
             case _: 
                 return ""
                 

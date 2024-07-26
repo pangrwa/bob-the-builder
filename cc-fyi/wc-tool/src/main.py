@@ -14,7 +14,7 @@ def main():
     for arg in args: 
         if is_flag(arg):
             flags.append(arg)
-        else:
+        else: 
             files.append(arg)
 
     pywc = PYWC()
