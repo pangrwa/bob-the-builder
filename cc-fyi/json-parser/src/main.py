@@ -1,10 +1,12 @@
 from json_dfa import JSONDFA
+from json_parser import JSONParser
 from my_token import Token
 import sys
 import io
 
 
 json_dfa = JSONDFA()
+json_parser = JSONParser()
 
 
 def scan(buffered_reader: io.TextIOWrapper) -> None:
