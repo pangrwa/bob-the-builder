@@ -1,0 +1,64 @@
+@startuml
+
+class JSONParser {
+    - BufferedReader bufferedReader
+}
+
+
+Enum Kind <<enumeration>> {
+    LBRACE
+    RBRACE
+    LSQUARE
+    RSQUARE
+    STRING
+    COLON
+    COMMA
+    MINUS
+    NUM 
+    ID
+    WHITESPACE
+    NULL
+    FALSE
+    TRUE
+}
+
+Class Token {
+    - Kind kind
+    - String lexeme
+    + getKind() : Kind
+    + getLexme() : String
+}
+
+class JSONDFA {
+    - State[] acceptingStates
+    - State[][128] transitions
+
+    + stateToKind(State) : Token::Kind
+    + tokenise(String) : Token[]
+    - registerTransition(State, String, State) : void
+    - registerTransitions(State, Function, State) : void
+}
+
+Enum State <<enumeration>> {
+    START
+    FAIL
+    LBRACE
+    RBRACE
+    LSQUARE
+    RSQUARE
+    OPEN_QUOTE
+    STRING
+    CLOSE_QUOTE
+    COLON
+    COMMA
+    NUM
+    MINUS
+    ID
+    WHITESPACE
+}
+
+JSONDFA +-- State
+Token +-- Kind
+JSONDFA ..Token 
+
+@enduml

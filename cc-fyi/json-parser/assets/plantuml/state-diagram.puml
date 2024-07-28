@@ -1,0 +1,34 @@
+@startuml
+hide empty description
+[*] --> Start
+Start --> Lbrace: {
+Start --> Rbrace: }
+Start --> Lsquare: [
+Start --> Rsquare: ]
+Start --> OpenQuote: "
+Start --> Colon: :
+Start --> Comma: ,
+Start --> Num: [0-9]
+Start --> Minus: -
+Start --> Id: [a-zA-Z_]
+Start --> WhiteSpace
+
+OpenQuote --> String: [a-zA-Z0-9Symbols/Quote]
+String --> String: [a-zA-Z0-9Symbols/Quote]
+String --> CloseQuote: "
+WhiteSpace --> WhiteSpace
+Id --> Id: [a-zA-Z0-9_]
+Num --> Num: [0-9]
+
+CloseQuote --> [*]
+Lbrace --> [*]
+Rbrace --> [*]
+Lsquare --> [*]
+Rsquare --> [*]
+Comma --> [*]
+Colon --> [*]
+Minus --> [*]
+Num --> [*]    
+Id --> [*]
+WhiteSpace --> [*]
+@enduml
