@@ -8,8 +8,8 @@
 From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal
 
 **Rules**
-$
-\begin{align}
+
+$\begin{align}
 \text{S} &\rightarrow  \ \vdash object \dashv \\
 \text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
 \text{statements} &\rightarrow \epsilon \\
@@ -29,8 +29,8 @@ $
 \text{items} &\rightarrow \epsilon \\
 \text{items} &\rightarrow \text{item items} \\
 \text{item} &\rightarrow \text{value end} \\
-\end{align}
-$
+\end{align}$
+
 
 **Nullable**
 |Non-Terminals|Nullable|
