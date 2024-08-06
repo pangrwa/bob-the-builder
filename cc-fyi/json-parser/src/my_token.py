@@ -20,11 +20,17 @@ class Token:
         FALSE = 12
         TRUE = 13
 
+        BOF = 14
+        EOF = 15
+
     def __init__(self, kind: "Token.Kind", lexeme: str):
         self.kind = kind
         self.lexeme = lexeme
 
     def __str__(self):
+        return f"[ {self.kind}, {self.lexeme} ]"
+
+    def __repr__(self) -> str:
         return f"[ {self.kind}, {self.lexeme} ]"
 
     def get_kind(self) -> "Token.Kind":
