@@ -1,0 +1,97 @@
+@startuml
+state 4 #pink
+state 5 #pink
+state 7 #pink
+state 8 #pink
+state 11 #pink
+state 12 #pink
+state 13 #pink
+state 14 #pink
+state 15 #pink
+state 16 #pink
+state 17 #pink
+state 19 #pink
+
+[*] --> 1
+1 --> 2: |-
+2 --> 3: object
+3 --> 4: -|
+2 --> 5: LBRACE
+5 --> 6: statements
+6 --> 7: RBRACE
+6 --> 8: endStatement
+6 --> 9: STRING
+9 --> 10: COLON
+10 --> 11: value
+10 --> 12: object
+10 --> 13: array
+10 --> 14: keywords
+10 --> 15: STRING
+10 --> 16: NUM
+10 --> 5: LBRACE
+10 --> 17: LSQUARE
+17 --> 18: items
+18 --> 19: RSQUARE
+17 --> 20: prevItems 
+20 --> 12: object
+20 --> 13: array
+20 --> 14: keywords
+20 --> 15: STRING
+20 --> 16: NUM
+
+
+
+1: S -> * |- object -|
+2: S -> |- * object -|
+2: object -> * LBRACE statements RBRACE
+3: S -> |- object * -|
+4: S -> |- object -| *
+5: object -> LBRACE * statements RBRACE
+5: statements -> * 
+5: statements -> * prevStatements endStatement
+5: prevStatements -> *
+5: prevStatements -> * prevStatements statement 
+6: object -> LBRACE statements * RBRACE
+6: statements -> prevStatements * endStatement
+6: endStatement -> * STRING COLON value
+7: object -> LBRACE statements RBRACE *
+8: statements -> prevStatements endStatement *
+9: endStatement -> STRING * COLON value
+10: endStatement -> STRING COLON * value
+10: value -> * object
+10: value -> * array 
+10: value -> * keywords
+10: value -> * STRING
+10: value -> * NUM
+10: object -> * LBRACE statements RBRACE
+10: array -> * LSQUARE items RSQUARE
+10: keywords -> * NULL
+10: keywords -> * FALSE
+10: keywords -> * TRUE
+11: endStatement -> STRING COLON value *
+12: value -> object *
+13: value -> array *
+14: value -> keywords *
+15: value -> STRING *
+16: value -> NUM *
+17: LSQUARE -> LSQUARE * items RSQUARE
+17: items -> *
+17: items -> * prevItems endItem
+17: prevItems -> *
+17: prevItems -> * prevItems items
+18: LSQUARE -> LSQUARE items * RSQUARE 
+19: LSQUARE -> LSQUARE items RSQUARE *
+20: items -> prevItems * endItem
+20: prevItems -> *
+20: prevItems -> prevItems * items
+20: items -> *
+20: items -> * prevItem value
+20: endItem -> * value
+20: value -> * object
+20: value -> * array 
+20: value -> * keywords
+20: value -> * STRING
+20: value -> * NUM
+
+
+@enduml

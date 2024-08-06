@@ -3,10 +3,98 @@
 ## Deterministic Finite Automata
 ![dfa_state-diagram](out/state-diagram/state-diagram.png)
 
+
 ## Context Free Grammar
+From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal
 **Rules**
 $$
 \begin{align}
+\text{S} &\rightarrow  \ \vdash object \dashv \\
+\text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
+\text{statements} &\rightarrow \epsilon \\
+\text{statements} &\rightarrow \text{statement statements}\\
+\text{statement} &\rightarrow \text{STRING COLON value end} \\
+\text{end} &\rightarrow \epsilon \\
+\text{end} &\rightarrow \text{COMMA} \\
+\text{value} &\rightarrow \text{object} \\
+\text{value} &\rightarrow \text{array} \\
+\text{value} &\rightarrow \text{keywords} \\
+\text{value} &\rightarrow \text{STRING} \\
+\text{value} &\rightarrow \text{NUM} \\
+\text{keywords} &\rightarrow \text{NULL} \\
+\text{keywords} &\rightarrow \text{FALSE} \\
+\text{keywords} &\rightarrow \text{TRUE} \\
+\text{array} &\rightarrow \text{LSQUARE items RSQUARE} \\
+\text{items} &\rightarrow \epsilon \\
+\text{items} &\rightarrow \text{item items} \\
+\text{item} &\rightarrow \text{value end} \\
+\end{align}
+$$
+
+**Nullable**
+|Non-Terminals|Nullable|
+|---|---|
+|S|false|
+|object|false|
+|statements|true|
+|statement|false|
+|end|true|
+|value|false|
+|array|false|
+|items|true|
+|item|false|
+|keywords|false|
+
+**First**
+|Non-Terminals|First|
+|---|---|
+|S|$\vdash$|
+|object|$\{$|
+|statements|$\text{STRING}$|
+|statement|$\text{STRING}$|
+|end|$\text{COMMA}$|
+|value|$\{, \text{NULL, FALSE, TRUE, STRING, NUM},[$|
+|array|$[$|
+|items|$\{,[,\text{NULL, FALSE, TRUE, STRING, NUM}$|
+|item|$\{,[,\text{NULL, FALSE, TRUE, STRING, NUM}$|
+|keywords|$\text{NULL, FALSE, TRUE}$|
+
+**Follow**
+|Non-Terminals|Follow|
+|---|---|
+|object|$\dashv, \text{COMMA}, \}, ]$|
+|statements|$\}$|
+|statement|$\}, \text{STRING}$|
+|end|$\}, \text{STRING}, ]$|
+|value|$\}, ], \text{COMMA}$|
+|array|$\}, ], \text{COMMA}$|
+|items|$]$|
+|item|$\{, [, \text{STRING, NUM, NULL, FALSE, TRUE}$|
+|keywords|$\}, ], \text{COMMA}$|
+
+**Predict Table**
+||$\vdash$|$\dashv$|{|}|[|]|STRING|COLON|COMMA|NUM|NULL|FALSE|TRUE
+|---|---|---|---|---|---|---|---|--|--|--|--|--|--|
+|S|1|||||||||||||
+|object|||2|||||||||||
+|statements||||3|||4|||||||
+|statement|||||||5|||||||
+|end||||6||6|6||7||||||||
+|value|||8||9||11|||12|10|10|10|
+|array|||||16||||||||||
+|items|||18||18|17|18|||18|18|18|18|
+|item|||19||19||19|||19|19|19|19|
+|keywords|||||||||||13|14|15|
+
+
+
+## Lessons Learnt
+These rules form a CFG that is ambiguous. Rule 6 and 7 are two unique rules that generate the same first terminal. Take note that left recursive grammar as shown from rule 4 can never support the LL(1) parsing algorithm. So we must try to force to be right recursive.
+
+**Rules**
+$$
+\begin{align*}
+\text{S} &\rightarrow  \ \vdash object \dashv \\
 \text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
 \text{statements} &\rightarrow \epsilon \\
 \text{statements} &\rightarrow \text{prevStatements endStatement}\\
@@ -23,11 +111,61 @@ $$
 \text{prevItems} &\rightarrow \text{prevItems item} \\
 \text{item} &\rightarrow \text{value COMMA} \\
 \text{keywords} &\rightarrow \text{NULL | FALSE | TRUE} \\
-\end{align}
+\end{align*}
 $$
 - These rules shouldn't support traililng comma
 - There are a compule of rules that start with the same terminal on the RHS, resulting in ambiguous grammar hence top-down parsing is not an option here
-- 
+
+**Nullable**
+|Iteration|...|2|
+|---|---|---|
+|S||false|
+|object||false|
+|statements||true|
+|prevStatements||true|
+|endStatement||false|
+|statement||false|
+|value||false|
+|array||false|
+|items||true|
+|prevItems||true|
+|endItem||false|
+|item||false|
+|keywords||false|
+
+
+**First**
+|Iteration|...|2|
+|---|---|---|
+|S||$\{\vdash\}$|
+|object||$\{\text{LBRACE}\}$|
+|statements||$\{\text{STRING}\}$|
+|prevStatements||$\{\text{STRING}\}$|
+|endStatement||$\{\text{STRING}\}$|
+|statement||$\{\text{STRING}\}$|
+|value||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|array||$\{\text{LSQAURE}\}$|
+|items||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|prevItems||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|endItem||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|item||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|keywords||$\{\text{NULL, FALSE, TRUE}\}$|
+
+**Follow**
+|Iteration|...|2|
+|---|---|---|
+|object||$\{\dashv, \text{COMMA, RBRACE, RSQUARE}\}$|
+|statements||$\{\text{RBRACE}\}$|
+|prevStatements||$\{\text{STRING}\}$|
+|endStatement||$\{\text{RBRACE}\}$|
+|statement||$\{\text{STRING}\}$|
+|value||$\{\text{COMMA, RBRACE, RSQUARE}\}$|
+|array||$\{\text{COMMA, RBRACE, RSQUARE}\}$|
+|items||$\{\text{RSQUARE}\}$|
+|prevItems||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|endItem||$\{\text{RSQUARE}\}$|
+|item||$\{\text{STRING, NUM, LBRACE, LSQUARE, NULL, FALSE, TRUE}\}$|
+|keywords||$\{\text{COMMA, RBRACE, RSQUARE}\}$|
 ## Notes
 - To be able to parse JSON, we need to be able to read in data from somewhere, this includes from reading a file and from standard output. Both using a buffered reader. 
 - We need someone to be able to parse the input, lets call this class `JSONParser` which contains a buffered reader
