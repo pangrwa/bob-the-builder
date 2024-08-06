@@ -6,6 +6,7 @@
 
 ## Context Free Grammar
 From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal
+
 **Rules**
 $$
 \begin{align}
@@ -49,28 +50,28 @@ $$
 |Non-Terminals|First|
 |---|---|
 |S|$\vdash$|
-|object|$\{$|
+|object|$\text{LBRACE}$|
 |statements|$\text{STRING}$|
 |statement|$\text{STRING}$|
 |end|$\text{COMMA}$|
-|value|$\{, \text{NULL, FALSE, TRUE, STRING, NUM},[$|
-|array|$[$|
-|items|$\{,[,\text{NULL, FALSE, TRUE, STRING, NUM}$|
-|item|$\{,[,\text{NULL, FALSE, TRUE, STRING, NUM}$|
+|value|$\text{LBRACE, LSQUARE, NULL, FALSE, TRUE, STRING, NUM}$|
+|array|$\text{LSQUARE}$|
+|items|$\text{LBRACE, LSQUARE, NULL, FALSE, TRUE, STRING, NUM}$|
+|item|$\text{LBRACE, LSQUARE, NULL, FALSE, TRUE, STRING, NUM}$|
 |keywords|$\text{NULL, FALSE, TRUE}$|
 
 **Follow**
 |Non-Terminals|Follow|
 |---|---|
-|object|$\dashv, \text{COMMA}, \}, ]$|
-|statements|$\}$|
-|statement|$\}, \text{STRING}$|
-|end|$\}, \text{STRING}, ]$|
-|value|$\}, ], \text{COMMA}$|
-|array|$\}, ], \text{COMMA}$|
-|items|$]$|
-|item|$\{, [, \text{STRING, NUM, NULL, FALSE, TRUE}$|
-|keywords|$\}, ], \text{COMMA}$|
+|object|$\dashv, \text{COMMA, RBRACE, RSQUARE}$|
+|statements|$\text{RBRACE}$|
+|statement|$\text{RBRACE, STRING}$|
+|end|$\text{RBRACE, RSQUARE, STRING}$|
+|value|$\text{RBRACE, RSQUARE, COMMA}$|
+|array|$\text{RBRACE, RSQUARE, COMMA}$|
+|items|$\text{RSQAURE}$|
+|item|$\text{LBRACE, LSQUARE, STRING, NUM, NULL, FALSE, TRUE}$|
+|keywords|$\text{RBRACE, RSQUARE, COMMA}$|
 
 **Predict Table**
 ||$\vdash$|$\dashv$|{|}|[|]|STRING|COLON|COMMA|NUM|NULL|FALSE|TRUE
