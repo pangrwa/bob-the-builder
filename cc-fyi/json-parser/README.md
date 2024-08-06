@@ -9,7 +9,8 @@ From the lessosn learnt, let's try to readjust the rules to do left factoring su
 
 **Rules**
 
-$\begin{align}
+```math
+\begin{align}
 \text{S} &\rightarrow  \ \vdash object \dashv \\
 \text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
 \text{statements} &\rightarrow \epsilon \\
@@ -29,7 +30,8 @@ $\begin{align}
 \text{items} &\rightarrow \epsilon \\
 \text{items} &\rightarrow \text{item items} \\
 \text{item} &\rightarrow \text{value end} \\
-\end{align}$
+\end{align}
+```
 
 
 **Nullable**
