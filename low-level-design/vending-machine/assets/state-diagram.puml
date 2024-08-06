@@ -1,0 +1,8 @@
+@startuml
+hide empty description
+[*] -> IdleState
+IdleState -> ReadyState : insertCoin / insertNote
+ReadyState -> DispenseState : selectProduct
+DispenseState -> ReturnChangeState : dispenseProduct
+ReturnChangeState -> IdleState : returnChange
+@enduml

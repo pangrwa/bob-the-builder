@@ -1,0 +1,80 @@
+@startuml
+class Product {
+    - String name
+    - double price
+}
+
+class Inventory {
+    - HashMap<Product, Integer> products
+    - addProduct(Product) : void
+    - removeProduct(Product) : void
+}
+
+
+class VendingMachine <<singleton>> {
+    - Inventory inventory
+    - double balance
+    - Product selectedProduct
+    - VendingMachineState currentState
+    - IdleState idleState
+    - ReadyState readyState
+    - DispenseState dispenseState
+    - ReturnChangeState returnChangeState
+    + insertCoin(Coin) : void
+    + insertNote(Note) : void
+    + selectProduct(Product) : void
+    + dispenseProduct(Product) : void
+    - setState(VendingMachineState) : void
+    - addCoin(Coin) : void
+    - addNote(Note) : void
+}
+
+class VendingMachineState <<abstract>> {
+    - VendingMachine vendingMachine
+    + insertCoin(Coin) : void
+    + insertNote(Note) : void
+    + selectProduct(Product) : void
+    + dispenseProduct(Product) : void
+    + returnChange() : void
+}
+
+class IdleState {
+}
+
+class ReadyState { 
+}
+
+class DispenseState {
+
+}
+class ReturnChangeState {
+}
+
+
+enum Coin {
+    - PENNY
+    - NICKEL
+    - DIME
+    - QUARTER
+}
+
+enum Note {
+    - ONE
+    - FIVE
+    - TEN
+    - TWENTY
+}
+
+VendingMachineState <|-- IdleState
+VendingMachineState <|-- ReadyState
+VendingMachineState <|-- DispenseState
+VendingMachineState <|-- ReturnChangeState 
+
+VendingMachine "1" *--> "1" Inventory
+Inventory "1" *--> "*" Product    
+VendingMachine .. Coin
+VendingMachine .. Note
+VendingMachineState .. Coin
+VendingMachineState .. Note
+
+@enduml
