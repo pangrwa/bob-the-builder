@@ -95,7 +95,7 @@ From the lessosn learnt, let's try to readjust the rules to do left factoring su
 These rules form a CFG that is ambiguous. Rule 6 and 7 are two unique rules that generate the same first terminal. Take note that left recursive grammar as shown from rule 4 can never support the LL(1) parsing algorithm. So we must try to force to be right recursive.
 
 **Rules**
-$$
+```math
 \begin{align*}
 \text{S} &\rightarrow  \ \vdash object \dashv \\
 \text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
@@ -115,7 +115,8 @@ $$
 \text{item} &\rightarrow \text{value COMMA} \\
 \text{keywords} &\rightarrow \text{NULL | FALSE | TRUE} \\
 \end{align*}
-$$
+```
+
 - These rules shouldn't support traililng comma
 - There are a compule of rules that start with the same terminal on the RHS, resulting in ambiguous grammar hence top-down parsing is not an option here
 
