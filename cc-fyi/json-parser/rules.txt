@@ -1,0 +1,71 @@
+.NONTERMINALS
+start
+object
+statements
+statement
+end
+value
+array
+items
+item
+keywords
+.RULES
+start BOF object EOF
+object LBRACE statements RBRACE
+statements
+statements statement statements
+statement STRING COLON value end
+end
+end COMMA
+value object
+value array
+value keywords
+value STRING
+value NUM
+keywords NULL
+keywords FALSE
+keywords TRUE
+array LSQUARE items RSQUARE
+items
+items item items
+item value end
+.LOOKUP
+start BOF 0
+object LBRACE 1
+statements RBRACE 2
+statements STRING 3
+statement STRING 4
+end RBRACE 5
+end RSQUARE 5
+end STRING 5
+end COMMA 6
+value LBRACE 7
+value LSQUARE 8
+value STRING 10 
+value NUM 11
+value NULL 9 
+value FALSE 9
+value TRUE 9
+array LSQUARE 15 
+items LBRACE 17
+items LSQUARE 17
+items RSQUARE 16
+items STRING 17
+items NUM 17
+items NULL 17
+items FALSE 17
+items TRUE 17
+item LBRACE 18
+item LSQUARE 18
+item STRING 18
+item NUM 18
+item NULL 18
+item FALSE 18
+item TRUE 18
+keywords NULL 12 
+keywords FALSE 13
+keywords TRUE 14 
+.END
+
+
+
