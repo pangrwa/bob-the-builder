@@ -5,7 +5,34 @@
 
 
 ## Context Free Grammar
-From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal
+```math
+\begin{align}
+\text{S} &\rightarrow  \ \vdash object \dashv \\
+\text{object} &\rightarrow \text{LBRACE statements RBRACE} \\
+\text{statements} &\rightarrow \epsilon \\
+\text{statements} &\rightarrow \text{statement nextStatements}\\
+\text{nextStatements} &\rightarrow \epsilon \\
+\text{nextStatements} &\rightarrow \text{COMMA statements} \\
+\text{statement} &\rightarrow \text{STRING COLON value} \\
+\text{value} &\rightarrow \text{object} \\
+\text{value} &\rightarrow \text{array} \\
+\text{value} &\rightarrow \text{keywords} \\
+\text{value} &\rightarrow \text{STRING} \\
+\text{value} &\rightarrow \text{NUM} \\
+\text{keywords} &\rightarrow \text{NULL} \\
+\text{keywords} &\rightarrow \text{FALSE} \\
+\text{keywords} &\rightarrow \text{TRUE} \\
+\text{array} &\rightarrow \text{LSQUARE items RSQUARE} \\
+\text{items} &\rightarrow \epsilon \\
+\text{items} &\rightarrow \text{item nextItems} \\
+\text{nextItems} &\rightarrow \epsilon \\
+\text{nextItems} &\rightarrow \text{COMMA items} \\
+\text{item} &\rightarrow \text{value} \\
+\end{align}
+```
+
+## Lessons Learnt
+From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal. But the issue with this is there could be trailing commas, `end` if it sees that the input is a Comma, it will gladly parse it, not knowing that it could be the end
 
 **Rules**
 
@@ -91,7 +118,6 @@ From the lessosn learnt, let's try to readjust the rules to do left factoring su
 
 
 
-## Lessons Learnt
 These rules form a CFG that is ambiguous. Rule 6 and 7 are two unique rules that generate the same first terminal. Take note that left recursive grammar as shown from rule 4 can never support the LL(1) parsing algorithm. So we must try to force to be right recursive.
 
 **Rules**
@@ -179,3 +205,5 @@ These rules form a CFG that is ambiguous. Rule 6 and 7 are two unique rules that
 - types: string
 - Use simplified maxmimal munch algorithm to scan through input and create a list of tokens
 - strings only support double quotes, once might get too complicated if i see another double quote
+- we could probaby improve debugging to the user by not rejecting the whitespace tokens during the tokeniser phase. We can take these tokens
+and count the number of whitespace and lines to keep track of the position of the error
