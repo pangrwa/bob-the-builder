@@ -2,6 +2,7 @@ from collections import defaultdict
 from typing import Self, DefaultDict, Set
 from typing import List, Any
 from my_token import Token
+from json_exceptions import JSONParserException
 
 
 # singleton
@@ -17,21 +18,18 @@ class JSONParser:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, input: List[Token]) -> None:
-        self._read_cfg("rules.txt")
-        # print(self._non_terminals)
-        # for key, value in self._lookup.items():
-        #     print(f"key: {key}, value: [")
-        #     for k, v in value.items():
-        #         print(f"({k}, {v}) ")
-        #     print(f")")
-        is_parsable = self._ll1_parse(input)
-        if is_parsable:
-            self._print_formatted_input(input)
-        else:
-            print("Error: unable to parse input")
+    def __init__(self) -> None:
+        self._read_cfg("../rules.txt")
 
-    def _print_formatted_input(self, input: List[Token]) -> None:
+    def parse(self, input: List[Token]) -> List[str]:
+        try:
+            self._ll1_parse(input)
+            fi = self._formatted_input(input)
+            return fi
+        except JSONParserException as e:
+            raise e
+
+    def _formatted_input(self, input: List[Token]) -> List[str]:
         output = []
         whitespace_count: int = 0
         for token in input:
@@ -75,9 +73,9 @@ class JSONParser:
                 case Token.Kind.TRUE:
                     output.append("true")
         output = "".join(output)
-        print(output)
+        return output
 
-    def _ll1_parse(self, input: List[Token]) -> bool:
+    def _ll1_parse(self, input: List[Token]) -> None:
         stack: List[str] = ["start"]
         input = (
             [
@@ -95,9 +93,7 @@ class JSONParser:
                 if (non_terminal not in self._lookup) or (
                     token.get_kind().name not in self._lookup[non_terminal]
                 ):
-                    print(
-                        f"Error: unable to find a suitable transition rule for: {non_terminal} with input: {token.get_kind().name}"
-                    )
+                    raise JSONParserException(f"Unexpected token: {token.get_lexeme()}")
                     return False  # error, unable to find a suitable rule
                 rule_number = self._lookup[non_terminal][token.get_kind().name]
                 rule = self._rules[rule_number]
@@ -110,11 +106,11 @@ class JSONParser:
             if stack and stack[-1] == token.get_kind().name:
                 stack.pop()
             else:
-                print(
-                    f"Error: input token doesn't match expected syntax: {stack} input: {token.get_kind().name}"
+                raise JSONParserException(
+                    f"Unexpected token: {token.get_lexeme()}, expected a {stack[-1]}"
                 )
                 return False
-        return True
+        # return True
 
     def _read_cfg(self, filename: str):
         self._rules: DefaultDict[int, List[str]] = defaultdict(list)

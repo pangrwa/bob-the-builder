@@ -4,11 +4,15 @@ from my_token import Token
 from typing import List
 import sys
 import io
+from json_exceptions import JSONDFAException
+
+json_dfa = JSONDFA()
+json_parser = JSONParser()
 
 
 def scan(buffered_reader: io.TextIOWrapper) -> List[Token]:
-    json_dfa = JSONDFA()
     all_tokens = []
+
     for line in buffered_reader:
         tokens = json_dfa.tokenise(line)
         new_tokens = []
@@ -21,7 +25,8 @@ def scan(buffered_reader: io.TextIOWrapper) -> List[Token]:
 
 
 def parse(tokens: List[Token]) -> None:
-    json_parser = JSONParser(tokens)
+    # need to handle exception
+    fi = json_parser.parse(tokens)
 
 
 def main():

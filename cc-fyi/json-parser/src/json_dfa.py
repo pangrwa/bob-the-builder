@@ -2,6 +2,7 @@ from typing import Self, Type, Any, Set, DefaultDict, overload, Callable
 from my_token import Token
 from enum import Enum
 from collections import defaultdict
+from json_exceptions import JSONDFAException
 
 
 # singleton
@@ -123,7 +124,9 @@ class JSONDFA:
                     current_state = JSONDFA.State.START
                     munched_input = ""
                 else:  # current state is not accepting, input is invalid
-                    raise ValueError(f"Unable to scan and tokenise input: {input}")
+                    raise JSONDFAException(
+                        f"Unable to scan and tokenise input: {munched_input}"
+                    )
             else:  # exists a transition
                 munched_input += c
                 current_state = next_state
@@ -131,7 +134,9 @@ class JSONDFA:
         if current_state in JSONDFA._accepting_states:
             tokens.append(Token(self._state_to_kind(current_state), munched_input))
         else:
-            raise ValueError(f"Unable to scan and tokenise input: {input}")
+            raise JSONDFAException(
+                f"Unable to scan and tokenise input: {munched_input}"
+            )
         return tokens
 
     def _state_to_kind(self, state: "JSONDFA.State") -> Token.Kind:

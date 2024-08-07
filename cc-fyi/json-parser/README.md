@@ -207,3 +207,6 @@ These rules form a CFG that is ambiguous. Rule 6 and 7 are two unique rules that
 - strings only support double quotes, once might get too complicated if i see another double quote
 - we could probaby improve debugging to the user by not rejecting the whitespace tokens during the tokeniser phase. We can take these tokens
 and count the number of whitespace and lines to keep track of the position of the error
+- numbers with decimals not yet supported
+- seems like there is something wrong with the parsing of negative numbers
+
