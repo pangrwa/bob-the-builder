@@ -19,7 +19,7 @@ class JSONParser:
         return cls._instance
 
     def __init__(self) -> None:
-        self._read_cfg("../rules.txt")
+        self._read_cfg("rules.txt")
 
     def parse(self, input: List[Token]) -> List[str]:
         try:

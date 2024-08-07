@@ -4,10 +4,12 @@ from json_parser import JSONParser
 from io import BytesIO, TextIOWrapper
 from main import scan, parse
 from json_exceptions import JSONDFAException, JSONParserException
+from mangum import Mangum
 
 app = FastAPI()
 json_dfa = JSONDFA()
 json_parser = JSONParser()
+handler = Mangum(app)
 
 
 @app.get("/")
