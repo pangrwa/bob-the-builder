@@ -11,8 +11,7 @@ function WorkArea() {
         setIsLoading(true);
         setError(null);
         try {
-            console.log(typeof rawValue);
-            const response = await fetch("/parse", {
+            const response = await fetch("/api/parse", {
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain"
