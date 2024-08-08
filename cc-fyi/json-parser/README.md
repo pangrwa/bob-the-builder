@@ -1,8 +1,13 @@
 # JSON Parser
 
+## Architectural diagram
+Created a python server using FastAPI and hosted in on AWS Lambda. There isn't a need for any API gateway. The server only supports one API endpoint which is equivalent to a function call after parsing the JSON data from the client. 
+
+See the code [here](https://github.com/pangrwa/bob-the-builder/tree/main/cc-fyi/json-parser)!
+
+![aws-diagram](assets/aws.drawio.png)
 ## Deterministic Finite Automata
 ![dfa_state-diagram](out/state-diagram/state-diagram.png)
-
 
 ## Context Free Grammar
 ```math
@@ -33,6 +38,8 @@
 
 ## Lessons Learnt
 From the lessosn learnt, let's try to readjust the rules to do left factoring such that there are no two unique rules that generate the same first terminal. But the issue with this is there could be trailing commas, `end` if it sees that the input is a Comma, it will gladly parse it, not knowing that it could be the end
+
+Used AWS Amplify and AWS Lambda, handled local proxy for local development through Vite, realised that Vite that does not support proxies in its config when it outputs the build file. Modify CORS accepted origins from AWS lambda to allow the invocation of the function from AWS Amplify.
 
 **Rules**
 
