@@ -1,6 +1,8 @@
 import { useState } from "react";
 import CodeBox from "./CodeBox";
 
+const api_url = import.meta.env.VITE_API_URL;
+
 function WorkArea() {
     const [rawValue, setRawValue] = useState("{\n  \"Hello\": \"World\"\n}");   
     const [formattedValue, setFormattedValue] = useState("{\n  \"Hello\": \"World\"\n}");
@@ -11,7 +13,7 @@ function WorkArea() {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch("/api/parse", {
+            const response = await fetch(`${api_url}/parse`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "text/plain"
