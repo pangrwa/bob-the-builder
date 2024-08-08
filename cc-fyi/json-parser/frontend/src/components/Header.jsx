@@ -6,7 +6,7 @@ function Header() {
         <div className="d-flex flex-column align-items-center justify-content-center"> 
             <h1>JSON-Parser</h1>
             <div>
-                <span className="text-primary">Find out more over here: </span><a href="https://pangrwa.github.io/bob-the-builder/cc-fyi/json-parser/"><FaGithub /></a>
+                <span className="text-primary">Find out more over here: </span><a target="_blank" href="https://pangrwa.github.io/bob-the-builder/cc-fyi/json-parser/"><FaGithub /></a>
             </div>
             <h3>Working on some features currently...</h3>
             <ul>
